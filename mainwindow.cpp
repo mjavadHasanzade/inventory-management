@@ -2,6 +2,9 @@
 #include "ui_mainwindow.h"
 #include "addproductdialog.h"
 #include <QAbstractItemModel>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 
 
@@ -12,7 +15,68 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     initilizeTableProducts();
-    statusBar()->showMessage("   Ready...",3000);
+
+
+
+    // Create and open the database connection
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("D:/tut_cpp/inventory-management/dev.db");
+    if (!db.open()) {
+        qDebug() << "Failed to open database:";
+        qDebug() << db.lastError().text();
+        return ;
+    }else{
+        statusBar()->showMessage("   Connectd to Database...",3000);
+    }
+
+    // Create the "products" table if it doesn't exist
+    QSqlQuery createTableQuery;
+    QString createTableSQL = "CREATE TABLE IF NOT EXISTS products ("
+                             "id INTEGER PRIMARY KEY,"
+                             "name TEXT,"
+                             "code TEXT,"
+                             "production_date DATE,"
+                             "expiration_date DATE,"
+                             "price REAL,"
+                             "stock INTEGER,"
+                             "quantity INTEGER"
+                             ")";
+    if (!createTableQuery.exec(createTableSQL)) {
+        qDebug() << "Failed to create table:";
+        qDebug() << createTableQuery.lastError().text();
+        db.close();
+        return ;
+    }else{
+        qDebug()<<"Table Created";
+    }
+
+    // Perform database operations
+    if (db.isOpen()) {
+        // Example: Execute a query
+        QSqlQuery query;
+        if (query.exec("SELECT * FROM products")) {
+            // Process the query results
+
+            while (query.next()) {
+
+                qDebug()<<query.value("production_date");
+
+                Product *product=new Product(this, "P123456", query.value("name").toString(), query.value("code").toString(),
+                                               query.value("production_date").toString(), query.value("expiration_date").toString(),
+                                               query.value("price").toInt(),query.value("quantity").toInt() );
+                products.append(product);
+
+            }
+            updateProductsTable();
+        } else {
+            qDebug() << "Failed to execute query:";
+            qDebug() << query.lastError().text();
+        }
+    }
+
+
+    // Close the database connection
+    db.close();
 }
 
 MainWindow::~MainWindow()
@@ -33,13 +97,13 @@ void MainWindow::initilizeTableProducts()
 
     ui->tableViewProducts->setModel(productModel);
 
-    Product *product0=new Product(this, "P123456", "T-Shirt", "TS123", "2022/05/15", "2023/05/14", 29.99, 50);
-    Product *product1=new Product(this, "P987654", "Jeans", "JN789", "2022/08/01", "2024/08/01", 49.99, 100);
-    Product *product2=new Product(this, "P567890", "Sneakers", "SN456", "2022/06/10", "2023/06/09", 79.99, 75);
-    Product *product3=new Product(this, "P246810", "Backpack", "BP123", "2022/07/20", "2024/07/19", 39.99, 50);
+//    Product *product0=new Product(this, "P123456", "T-Shirt", "TS123", "2022/05/15", "2023/05/14", 29.99, 50);
+//    Product *product1=new Product(this, "P987654", "Jeans", "JN789", "2022/08/01", "2024/08/01", 49.99, 100);
+//    Product *product2=new Product(this, "P567890", "Sneakers", "SN456", "2022/06/10", "2023/06/09", 79.99, 75);
+//    Product *product3=new Product(this, "P246810", "Backpack", "BP123", "2022/07/20", "2024/07/19", 39.99, 50);
 
-    products<<product0<<product1<<product2<<product3;
-    updateProductsTable();
+//    products<<product0<<product1<<product2<<product3;
+
 
 }
 
