@@ -19,6 +19,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_actionProduct_triggered();
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel* productModel = new QStandardItemModel();
@@ -29,6 +32,7 @@ private:
 
 
     void initilizeTableProducts();
+    void updateProductsTable();
 
 };
 

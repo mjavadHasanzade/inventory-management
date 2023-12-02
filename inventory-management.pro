@@ -24,17 +24,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    addproductdialog.cpp \
     product.cpp \
         main.cpp \
         mainwindow.cpp \
 
 
 HEADERS += \
+    addproductdialog.h \
     product.h \
         mainwindow.h \
 
 
 FORMS += \
+        addproductdialog.ui \
         mainwindow.ui
 
 RESOURCES += \

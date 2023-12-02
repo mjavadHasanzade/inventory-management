@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "addproductdialog.h"
+#include <QAbstractItemModel>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -36,6 +38,17 @@ void MainWindow::initilizeTableProducts()
 
     products<<product0<<product1<<product2<<product3;
 
+    updateProductsTable();
+
+}
+
+void MainWindow::updateProductsTable()
+{
+    QAbstractItemModel* model =  ui->tableViewProducts->model();
+    if(model){
+        model->removeRows(0, model->rowCount());
+    }
+
     for (int i = 0; i < products.length(); ++i) {
         int newRow = productModel->rowCount();
         productModel->setItem(newRow, 0, new QStandardItem(products.at(i)->name()));
@@ -45,5 +58,23 @@ void MainWindow::initilizeTableProducts()
         productModel->setItem(newRow, 4, new QStandardItem(QString::number(products.at(i)->price())));
         productModel->setItem(newRow, 5, new QStandardItem(QString::number(products.at(i)->stockQuantity())));
     }
-
 }
+
+
+void MainWindow::on_actionProduct_triggered()
+{
+    AddProductDialog *addProductDialog=new AddProductDialog(this);
+    int ret= addProductDialog->exec();
+
+    if(ret==QDialog::Accepted){
+        Product *newProduct=new Product(this,"P246810",addProductDialog->m_name,
+                                          addProductDialog->m_code,addProductDialog->m_productionDate,addProductDialog->m_expirationDate
+                                          ,addProductDialog->m_price,addProductDialog->m_stockQuantity);
+
+        products.append(newProduct);
+        updateProductsTable();
+    }
+}
+
+
+
