@@ -1,2 +1,14 @@
-<!DOCTYPE RCC>
-<RCC version="1.0"/>
+<RCC>
+    <qresource prefix="/">
+        <file>images/icons8-add-48.png</file>
+        <file>images/icons8-create-order-48.png</file>
+        <file>images/icons8-in-inventory-48.png</file>
+        <file>images/icons8-inventory-48.png</file>
+        <file>images/icons8-new-48.png</file>
+        <file>images/icons8-order-48.png</file>
+        <file>images/icons8-transaction-48.png</file>
+        <file>images/icons8-exit-48.png</file>
+        <file>images/icons8-view-all-48.png</file>
+        <file>images/icons8-about-96.png</file>
+    </qresource>
+</RCC>
