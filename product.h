@@ -12,8 +12,6 @@ public:
     explicit Product(QObject *parent,QString ID, QString name,
             QString code, QString productionDate, QString expirationDate, int price, int stockQuantity);
 
-
-
     QString name() const;
     QString code() const;
     QString productionDate() const;
