@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStandardItemModel>
+#include "./product.h"
+#include <QVector>
+
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +21,15 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QStandardItemModel* productModel = new QStandardItemModel();
+
+    //==========Storages======================================
+
+    QList<Product*> products;
+
+
+    void initilizeTableProducts();
+
 };
 
 #endif // MAINWINDOW_H

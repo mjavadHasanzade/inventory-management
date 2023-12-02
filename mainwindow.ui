@@ -6,21 +6,51 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>679</width>
-    <height>477</height>
+    <width>757</width>
+    <height>527</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Inventory Managment</string>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabWidgetProducts">
+       <attribute name="title">
+        <string>Products</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QTableView" name="tableViewProducts"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabWidgetInventories">
+       <attribute name="title">
+        <string>Inventories</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabWidgetOrders">
+       <attribute name="title">
+        <string>Orders</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>679</width>
-     <height>20</height>
+     <width>757</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAdd_New">
