@@ -19,6 +19,8 @@ public:
     int price() const;
     int stockQuantity() const;
 
+    QString ID() const;
+
 signals:
 
 public slots:

@@ -35,3 +35,8 @@ int Product::stockQuantity() const
 {
     return m_stockQuantity;
 }
+
+QString Product::ID() const
+{
+    return m_ID;
+}
