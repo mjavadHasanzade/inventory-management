@@ -13,6 +13,8 @@ class AddProductDialog : public QDialog
 
 public:
     explicit AddProductDialog(QWidget *parent = nullptr);
+    AddProductDialog(QWidget *parent, QString name,
+                     QString code, QString productionDate, QString expirationDate, int price, int stockQuantity);
     ~AddProductDialog();
 
     QString m_name;
@@ -32,6 +34,7 @@ private:
     Ui::AddProductDialog *ui;
 
     bool validateField(const QString& value, const QString& fieldName);
+    void setupRegex();
 };
 
 #endif // ADDPRODUCTDIALOG_H

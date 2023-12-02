@@ -1,13 +1,33 @@
 #include "addproductdialog.h"
 #include "ui_addproductdialog.h"
 #include <QMessageBox>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 AddProductDialog::AddProductDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddProductDialog)
 {
     ui->setupUi(this);
+    setupRegex();
 }
+
+AddProductDialog::AddProductDialog(QWidget *parent, QString name, QString code, QString productionDate,
+                                   QString expirationDate, int price, int stockQuantity)
+    : QDialog(parent),ui(new Ui::AddProductDialog), m_name(name), m_code(code),
+    m_productionDate(productionDate), m_expirationDate(expirationDate), m_price(price), m_stockQuantity(stockQuantity)
+{
+    ui->setupUi(this);
+    setupRegex();
+
+    ui->nameLineEdit->setText(name);
+    ui->codeLineEdit->setText(code);
+    ui->priceLineEdit->setText(QString::number(price));
+    ui->productiondateEdit->setDate(QDate::fromString(productionDate, "yyyy/MM/dd"));
+    ui->expirationDateEdit->setDate(QDate::fromString(expirationDate, "yyyy/MM/dd"));
+    ui->quantityLineEdit->setText(QString::number(stockQuantity));
+}
+
 
 AddProductDialog::~AddProductDialog()
 {
@@ -53,6 +73,14 @@ bool AddProductDialog::validateField(const QString& value, const QString& fieldN
         return false;
     }
     return true;
+}
+
+void AddProductDialog::setupRegex()
+{
+    QRegularExpression  regex("^[0-9]+$");
+    QValidator *validator = new QRegularExpressionValidator(regex,this);
+    ui->priceLineEdit->setValidator(validator);
+    ui->quantityLineEdit->setValidator(validator);
 }
 
 

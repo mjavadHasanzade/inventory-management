@@ -5,6 +5,7 @@
 #include <QStandardItemModel>
 #include "./product.h"
 #include <QVector>
+#include <QMessageBox>
 
 
 namespace Ui {
@@ -21,6 +22,10 @@ public:
 
 private slots:
     void on_actionProduct_triggered();
+
+    void on_deleteProductBtn_clicked();
+
+    void on_editProductBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
