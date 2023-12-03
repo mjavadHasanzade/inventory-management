@@ -23,8 +23,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initilizeTableProducts()
 {
-    ui->tableViewProducts->verticalHeader()->setVisible(false);
-
+    //    ui->tableViewProducts->verticalHeader()->setVisible(false);
     productModel->setColumnCount(6);
 
     productModel->setHorizontalHeaderItem(0,new QStandardItem("Name"));
@@ -44,9 +43,9 @@ void MainWindow::initilizeTableProducts()
             // Process the query results
 
             while (query.next()) {
-                Product *product=new Product(this, "P123456", query.value("name").toString(), query.value("code").toString(),
+                Product *product=new Product(this, query.value("id").toString(), query.value("name").toString(), query.value("code").toString(),
                                                query.value("production_date").toString(), query.value("expiration_date").toString(),
-                                               query.value("price").toInt(),query.value("quantity").toInt() );
+                                               query.value("price").toInt(),query.value("quantity_stock").toInt() );
                 products.append(product);
 
             }
@@ -92,6 +91,23 @@ void MainWindow::on_actionProduct_triggered()
                                           addProductDialog->m_code,addProductDialog->m_productionDate,addProductDialog->m_expirationDate
                                           ,addProductDialog->m_price,addProductDialog->m_stockQuantity);
 
+        db.open();
+
+        QString q = QString("INSERT INTO products (name, code, production_date, expiration_date, price, quantity_stock) "
+                            "VALUES ('%1', '%2', '%3', '%4', %5, %6)").arg(addProductDialog->m_name,
+                             addProductDialog->m_code, addProductDialog->m_productionDate,
+                             addProductDialog->m_expirationDate, QString::number(addProductDialog->m_price),
+                             QString::number(addProductDialog->m_stockQuantity));
+
+        // Execute the insert query
+        QSqlQuery query;
+        if (!query.exec(q)) {
+            qWarning() << "Failed to execute insert query:" << query.lastError().text();
+            return ;
+        }
+
+        db.close();
+
         products.append(newProduct);
         updateProductsTable();
     }
@@ -114,11 +130,22 @@ void MainWindow::on_deleteProductBtn_clicked()
 
             int row = selectedRows.at(0).row();
 
-            products.removeAt(row);
-            updateProductsTable();
 
             //no updating list
             //productModel->removeRow(row);
+
+            db.open();
+
+            QSqlQuery delQuery;
+            if (!delQuery.exec("DELETE FROM products WHERE id = "+products.at(row)->ID())) {
+                qWarning() << "Failed to delete rows from 'products' table:" << delQuery.lastError().text();
+                return;
+            }
+            db.close();
+
+            products.removeAt(row);
+            updateProductsTable();
+
         }
 
     }else{
@@ -151,6 +178,23 @@ void MainWindow::on_editProductBtn_clicked()
                                                  addProductDialog->m_code,addProductDialog->m_productionDate,addProductDialog->m_expirationDate
                                                  ,addProductDialog->m_price,addProductDialog->m_stockQuantity);
 
+            db.open();
+
+            QSqlQuery query;
+            QString q = QString("UPDATE products SET name = '%1', code = '%2', production_date = '%3', expiration_date = '%4',"
+                                " price = '%5', quantity_stock = '%6' WHERE id = '%7'")
+                            .arg(addProductDialog->m_name,
+                                 addProductDialog->m_code, addProductDialog->m_productionDate,
+                                 addProductDialog->m_expirationDate, QString::number(addProductDialog->m_price),
+                                 QString::number(addProductDialog->m_stockQuantity),products.at(row)->ID());
+
+            if (!query.exec(q)) {
+                qWarning() << "Failed to update rows in 'products' table:" << query.lastError().text();
+                return ;
+            }
+
+            db.close();
+
             products.replace(row,editedProduct);
             updateProductsTable();
         }
@@ -178,24 +222,67 @@ void MainWindow::setupDatabase()
         statusBar()->showMessage("   Connectd to Database...",3000);
     }
 
-    // Create the "products" table if it doesn't exist
-    QSqlQuery createTableQuery;
-    QString createTableSQL = "CREATE TABLE IF NOT EXISTS products ("
-                             "id INTEGER PRIMARY KEY,"
-                             "name TEXT,"
-                             "code TEXT,"
-                             "production_date DATE,"
-                             "expiration_date DATE,"
-                             "price REAL,"
-                             "stock INTEGER,"
-                             "quantity INTEGER"
-                             ")";
-    if (!createTableQuery.exec(createTableSQL)) {
-        qDebug() << "Failed to create table:";
-        qDebug() << createTableQuery.lastError().text();
-        db.close();
+    QSqlQuery query;
+    if (!query.exec("CREATE TABLE IF NOT EXISTS products ("
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "name VARCHAR(50) NOT NULL,"
+                    "code VARCHAR(20) NOT NULL,"
+                    "production_date DATE,"
+                    "expiration_date DATE,"
+                    "price DECIMAL(10, 2) NOT NULL,"
+                    "quantity_stock INT NOT NULL"
+                    ")")) {
+        qWarning() << "Failed to create 'products' table:" << query.lastError().text();
         return ;
     }
 
+    // Create the "warehouses" table
+    if (!query.exec("CREATE TABLE IF NOT EXISTS warehouses ("
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "name VARCHAR(50) NOT NULL,"
+                    "address VARCHAR(100) NOT NULL,"
+                    "capacity INT NOT NULL"
+                    ")")) {
+        qWarning() << "Failed to create 'warehouses' table:" << query.lastError().text();
+        return ;
+    }
+
+    // Create the "product_warehouse" table
+    if (!query.exec("CREATE TABLE IF NOT EXISTS product_warehouse ("
+                    "product_id INT,"
+                    "warehouse_id INT,"
+                    "quantity INT,"
+                    "PRIMARY KEY (product_id, warehouse_id),"
+                    "FOREIGN KEY (product_id) REFERENCES products(id),"
+                    "FOREIGN KEY (warehouse_id) REFERENCES warehouses(id)"
+                    ")")) {
+        qWarning() << "Failed to create 'product_warehouse' table:" << query.lastError().text();
+        return ;
+    }
+
+    if (!query.exec("CREATE TABLE IF NOT EXISTS orders ("
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "product_id INT,"
+                    "warehouse_id INT,"
+                    "quantity INT,"
+                    "FOREIGN KEY (product_id) REFERENCES products(id),"
+                    "FOREIGN KEY (warehouse_id) REFERENCES warehouses(id)"
+                    ")")) {
+        qWarning() << "Failed to create 'orders' table:" << query.lastError().text();
+        return ;
+    }
+
+    // Create the "transactions" table
+    if (!query.exec("CREATE TABLE IF NOT EXISTS transactions ("
+                    "product_id INT,"
+                    "warehouse_id INT,"
+                    "quantity INT,"
+                    "FOREIGN KEY (product_id) REFERENCES products(id),"
+                    "FOREIGN KEY (warehouse_id) REFERENCES warehouses(id),"
+                    "PRIMARY KEY (product_id, warehouse_id)"
+                    ")")) {
+        qWarning() << "Failed to create 'transactions' table:" << query.lastError().text();
+        return ;
+    }
 }
 
