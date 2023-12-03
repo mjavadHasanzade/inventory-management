@@ -2,11 +2,6 @@
 #include "ui_mainwindow.h"
 #include "addproductdialog.h"
 #include <QAbstractItemModel>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
-
-
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,41 +9,32 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+    setupDatabase();
+
     initilizeTableProducts();
 
+}
 
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
 
-    // Create and open the database connection
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("D:/tut_cpp/inventory-management/dev.db");
-    if (!db.open()) {
-        qDebug() << "Failed to open database:";
-        qDebug() << db.lastError().text();
-        return ;
-    }else{
-        statusBar()->showMessage("   Connectd to Database...",3000);
-    }
+void MainWindow::initilizeTableProducts()
+{
+    ui->tableViewProducts->verticalHeader()->setVisible(false);
 
-    // Create the "products" table if it doesn't exist
-    QSqlQuery createTableQuery;
-    QString createTableSQL = "CREATE TABLE IF NOT EXISTS products ("
-                             "id INTEGER PRIMARY KEY,"
-                             "name TEXT,"
-                             "code TEXT,"
-                             "production_date DATE,"
-                             "expiration_date DATE,"
-                             "price REAL,"
-                             "stock INTEGER,"
-                             "quantity INTEGER"
-                             ")";
-    if (!createTableQuery.exec(createTableSQL)) {
-        qDebug() << "Failed to create table:";
-        qDebug() << createTableQuery.lastError().text();
-        db.close();
-        return ;
-    }else{
-        qDebug()<<"Table Created";
-    }
+    productModel->setColumnCount(6);
+
+    productModel->setHorizontalHeaderItem(0,new QStandardItem("Name"));
+    productModel->setHorizontalHeaderItem(1,new QStandardItem("Code"));
+    productModel->setHorizontalHeaderItem(2,new QStandardItem("Production Date"));
+    productModel->setHorizontalHeaderItem(3,new QStandardItem("Expiration Date"));
+    productModel->setHorizontalHeaderItem(4,new QStandardItem("Price"));
+    productModel->setHorizontalHeaderItem(5,new QStandardItem("Quantity"));
+
+    ui->tableViewProducts->setModel(productModel);
 
     // Perform database operations
     if (db.isOpen()) {
@@ -58,9 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
             // Process the query results
 
             while (query.next()) {
-
-                qDebug()<<query.value("production_date");
-
                 Product *product=new Product(this, "P123456", query.value("name").toString(), query.value("code").toString(),
                                                query.value("production_date").toString(), query.value("expiration_date").toString(),
                                                query.value("price").toInt(),query.value("quantity").toInt() );
@@ -77,33 +60,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Close the database connection
     db.close();
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-void MainWindow::initilizeTableProducts()
-{
-    productModel->setColumnCount(6);
-
-    productModel->setHorizontalHeaderItem(0,new QStandardItem("Name"));
-    productModel->setHorizontalHeaderItem(1,new QStandardItem("Code"));
-    productModel->setHorizontalHeaderItem(2,new QStandardItem("Production Date"));
-    productModel->setHorizontalHeaderItem(3,new QStandardItem("Expiration Date"));
-    productModel->setHorizontalHeaderItem(4,new QStandardItem("Price"));
-    productModel->setHorizontalHeaderItem(5,new QStandardItem("Quantity"));
-
-    ui->tableViewProducts->setModel(productModel);
-
-//    Product *product0=new Product(this, "P123456", "T-Shirt", "TS123", "2022/05/15", "2023/05/14", 29.99, 50);
-//    Product *product1=new Product(this, "P987654", "Jeans", "JN789", "2022/08/01", "2024/08/01", 49.99, 100);
-//    Product *product2=new Product(this, "P567890", "Sneakers", "SN456", "2022/06/10", "2023/06/09", 79.99, 75);
-//    Product *product3=new Product(this, "P246810", "Backpack", "BP123", "2022/07/20", "2024/07/19", 39.99, 50);
-
-//    products<<product0<<product1<<product2<<product3;
-
 
 }
 
@@ -197,12 +153,48 @@ void MainWindow::on_editProductBtn_clicked()
 
             products.replace(row,editedProduct);
             updateProductsTable();
-            qDebug()<<products.at(row)->ID();
         }
 
 
     }else{
         QMessageBox::information(this,"Info","Please Select one row.");
+    }
+
+}
+
+void MainWindow::setupDatabase()
+{
+
+
+
+    // Create and open the database connection
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("D:/tut_cpp/inventory-management/dev.db");
+    if (!db.open()) {
+        qDebug() << "Failed to open database:";
+        qDebug() << db.lastError().text();
+        return ;
+    }else{
+        statusBar()->showMessage("   Connectd to Database...",3000);
+    }
+
+    // Create the "products" table if it doesn't exist
+    QSqlQuery createTableQuery;
+    QString createTableSQL = "CREATE TABLE IF NOT EXISTS products ("
+                             "id INTEGER PRIMARY KEY,"
+                             "name TEXT,"
+                             "code TEXT,"
+                             "production_date DATE,"
+                             "expiration_date DATE,"
+                             "price REAL,"
+                             "stock INTEGER,"
+                             "quantity INTEGER"
+                             ")";
+    if (!createTableQuery.exec(createTableSQL)) {
+        qDebug() << "Failed to create table:";
+        qDebug() << createTableQuery.lastError().text();
+        db.close();
+        return ;
     }
 
 }
