@@ -15,7 +15,7 @@ public:
 
     void setupDatabase();
     QSqlDatabase getDb() const;
-    void executeQuery(QString q);
+    QSqlQuery executeQuery(QString q);
 
 
 signals:

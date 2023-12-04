@@ -12,13 +12,13 @@ QSqlDatabase Database::getDb() const
     return db;
 }
 
-void Database::executeQuery(QString q)
+QSqlQuery Database::executeQuery(QString q)
 {
     db.open();
     QSqlQuery query;
     if (!query.exec(q)) {
         qWarning() << "Failed to execute insert query:" << query.lastError().text();
-        return ;
+        return QSqlQuery(); // return invalid QSqlQuery
     }
     db.close();
 }
