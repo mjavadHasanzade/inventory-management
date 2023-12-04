@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "addproductdialog.h"
 #include <QAbstractItemModel>
+#include "inventorydialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,7 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     db.setupDatabase();
     initilizeTableProducts();
+    initilizeTableInventories();
 
+    db.getDb().close();
 }
 
 MainWindow::~MainWindow()
@@ -56,10 +59,6 @@ void MainWindow::initilizeTableProducts()
         }
     }
 
-
-    // Close the database connection
-    db.getDb().close();
-
 }
 
 void MainWindow::updateProductsTable()
@@ -80,7 +79,6 @@ void MainWindow::updateProductsTable()
     }
 }
 
-
 void MainWindow::on_actionProduct_triggered()
 {
     AddProductDialog *addProductDialog=new AddProductDialog(this);
@@ -92,9 +90,9 @@ void MainWindow::on_actionProduct_triggered()
                                           ,addProductDialog->m_price,addProductDialog->m_stockQuantity);
 
         QString q = queries.insertProductQuery.arg(addProductDialog->m_name,
-                             addProductDialog->m_code, addProductDialog->m_productionDate,
-                             addProductDialog->m_expirationDate, QString::number(addProductDialog->m_price),
-                             QString::number(addProductDialog->m_stockQuantity));
+                                                   addProductDialog->m_code, addProductDialog->m_productionDate,
+                                                   addProductDialog->m_expirationDate, QString::number(addProductDialog->m_price),
+                                                   QString::number(addProductDialog->m_stockQuantity));
 
         // Execute the insert query
         db.executeQuery(q);
@@ -103,9 +101,6 @@ void MainWindow::on_actionProduct_triggered()
         updateProductsTable();
     }
 }
-
-
-
 
 void MainWindow::on_deleteProductBtn_clicked()
 {
@@ -136,7 +131,6 @@ void MainWindow::on_deleteProductBtn_clicked()
         QMessageBox::information(this,"Info","Please Select one row.");
     }
 }
-
 
 void MainWindow::on_editProductBtn_clicked()
 {
@@ -181,4 +175,117 @@ void MainWindow::on_editProductBtn_clicked()
 
 }
 
+
+//===================================> Inventories <==============================================================//
+
+
+
+void MainWindow::initilizeTableInventories()
+{
+    inventoryModel->setColumnCount(3);
+
+    inventoryModel->setHorizontalHeaderItem(0,new QStandardItem("Name"));
+    inventoryModel->setHorizontalHeaderItem(1,new QStandardItem("Address"));
+    inventoryModel->setHorizontalHeaderItem(2,new QStandardItem("Capacity"));
+
+    ui->inventoriesTableView->setModel(inventoryModel);
+
+    // Perform database operations
+    if (db.getDb().isOpen()) {
+        QSqlQuery query;
+        if (query.exec(queries.getAllInventoriesQuery)) {
+            // Process the query results
+            while (query.next()) {
+                Inventory *inv=new Inventory(this, query.value("id").toInt(), query.value("name").toString()
+                                               ,query.value("address").toString(),query.value("capacity").toInt());
+                inventories.append(inv);
+
+            }
+            updateInventoriesTable();
+        } else {
+            qDebug() << "Failed to execute query:";
+            qDebug() << query.lastError().text();
+        }
+    }
+
+
+    // Close the database connection
+    db.getDb().close();
+}
+
+void MainWindow::updateInventoriesTable()
+{
+    QAbstractItemModel* model =  ui->inventoriesTableView->model();
+    if(model){
+        model->removeRows(0, model->rowCount());
+    }
+
+    for (int i = 0; i < inventories.length(); ++i) {
+        int newRow = inventoryModel->rowCount();
+        inventoryModel->setItem(newRow, 0, new QStandardItem(inventories.at(i)->name()));
+        inventoryModel->setItem(newRow, 1, new QStandardItem(inventories.at(i)->address()));
+        inventoryModel->setItem(newRow, 2, new QStandardItem(QString::number(inventories.at(i)->capacity())));
+    }
+}
+
+
+void MainWindow::on_actionInventory_triggered()
+{
+    InventoryDialog *invDialog=new InventoryDialog(this);
+
+    int ret= invDialog->exec();
+
+    ui->tabWidget->setCurrentIndex(1);
+
+    if(ret == QDialog::Accepted){
+        Inventory *newInv=new Inventory(this,0,invDialog->name(),invDialog->address(),invDialog->capacity());
+
+        QString q = queries.insertInventoryQuery.arg(invDialog->name(), invDialog->address(), QString::number(invDialog->capacity()));
+        db.executeQuery(q);
+
+        inventories.append(newInv);
+        updateInventoriesTable();
+    }
+}
+
+
+void MainWindow::on_deleteInventoryBtn_clicked()
+{
+    QModelIndexList selectedRows = ui->inventoriesTableView->selectionModel()->selectedRows();
+
+    // Check if exactly one row is selected
+    if (selectedRows.size() == 1) {
+
+        int ret = QMessageBox::question(this, "Confirmation", "Are you sure you want to proceed?",
+                                        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+
+        if(ret==QMessageBox::Ok){
+
+            int row = selectedRows.at(0).row();
+
+
+            //no updating list
+            //productModel->removeRow(row);
+            db.getDb().open();
+            QSqlQuery query;
+
+            if(query.exec(queries.checkProductInWarehouseExistsQuery.arg(inventories.at(row)->ID()))){
+                if(query.next()){
+                    QMessageBox::critical(this,"Error","Inventory has Products");
+
+                }else{
+
+                    db.executeQuery(queries.deleteInventoryQuery.arg(inventories.at(row)->ID()));
+                    inventories.removeAt(row);
+                    updateInventoriesTable();
+                }
+            }
+
+
+        }
+
+    }else{
+        QMessageBox::information(this,"Info","Please Select one row.");
+    }
+}
 

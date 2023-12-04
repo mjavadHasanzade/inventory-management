@@ -3,11 +3,12 @@
 
 #include <QMainWindow>
 #include <QStandardItemModel>
-#include "./product.h"
+#include "product.h"
 #include <QVector>
 #include <QMessageBox>
 #include "database.h"
 #include "queries.h"
+#include "inventory.h"
 
 namespace Ui {
 class MainWindow;
@@ -28,21 +29,31 @@ private slots:
 
     void on_editProductBtn_clicked();
 
+    void on_actionInventory_triggered();
+
+    void on_deleteInventoryBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     QStandardItemModel* productModel = new QStandardItemModel();
+    QStandardItemModel* inventoryModel = new QStandardItemModel();
+
+    //===============================================================
     Database db;
     Queries queries;
 
     //==========Storages======================================
 
     QList<Product*> products;
+    QList<Inventory*> inventories;
 
     //===========Functions====================================
     void setupDatabase();
     void initilizeTableProducts();
     void updateProductsTable();
 
+    void initilizeTableInventories();
+    void updateInventoriesTable();
 };
 
 #endif // MAINWINDOW_H
