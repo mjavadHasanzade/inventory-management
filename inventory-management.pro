@@ -25,15 +25,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     addproductdialog.cpp \
+    database.cpp \
     product.cpp \
         main.cpp \
         mainwindow.cpp \
+        queries.cpp
 
 
 HEADERS += \
     addproductdialog.h \
+    database.h \
     product.h \
         mainwindow.h \
+    queries.h
 
 
 FORMS += \

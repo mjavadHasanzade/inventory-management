@@ -6,11 +6,8 @@
 #include "./product.h"
 #include <QVector>
 #include <QMessageBox>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
-
-
+#include "database.h"
+#include "queries.h"
 
 namespace Ui {
 class MainWindow;
@@ -34,7 +31,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QStandardItemModel* productModel = new QStandardItemModel();
-    QSqlDatabase db;
+    Database db;
+    Queries queries;
 
     //==========Storages======================================
 
