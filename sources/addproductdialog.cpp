@@ -1,4 +1,4 @@
-#include "addproductdialog.h"
+#include "../headers/addproductdialog.h"
 #include "ui_addproductdialog.h"
 #include <QMessageBox>
 #include <QRegularExpression>

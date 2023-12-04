@@ -1,4 +1,4 @@
-#include "inventorydialog.h"
+#include "../headers/inventorydialog.h"
 #include "ui_inventorydialog.h"
 #include <QMessageBox>
 #include <QRegularExpression>

@@ -1,8 +1,8 @@
-#include "mainwindow.h"
+#include "../headers/mainwindow.h"
 #include "ui_mainwindow.h"
-#include "addproductdialog.h"
+#include "../headers/addproductdialog.h"
 #include <QAbstractItemModel>
-#include "inventorydialog.h"
+#include "../headers/inventorydialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

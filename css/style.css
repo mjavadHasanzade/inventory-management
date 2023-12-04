@@ -1,0 +1,233 @@
+/* Set the background color to a dark shade */
+QWidget {
+    background-color: #1c222b;
+    color: #c9d1d9;
+}
+
+/* Customize QPushButton */
+QPushButton {
+    background-color: #58a6ff;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    padding: 8px 16px;
+}
+
+QPushButton:hover {
+    background-color: #007bff;
+}
+
+QPushButton:pressed {
+    background-color: #0056b3;
+}
+
+/* Customize QRadioButton and QCheckBox */
+QRadioButton,
+QCheckBox {
+    color: #c9d1d9;
+}
+
+QRadioButton::indicator,
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+}
+
+QRadioButton::indicator:unchecked,
+QCheckBox::indicator:unchecked {
+    border: 1px solid #c9d1d9;
+    background-color: transparent;
+}
+
+QRadioButton::indicator:checked,
+QCheckBox::indicator:checked {
+    border: 1px solid #58a6ff;
+    background-color: #58a6ff;
+}
+
+/* Customize QLineEdit */
+QLineEdit {
+    background-color: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 4px;
+    padding: 6px;
+    color: #c9d1d9;
+}
+
+/* Customize QComboBox */
+QComboBox {
+    background-color: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 4px;
+    padding: 6px;
+    color: #c9d1d9;
+}
+
+QComboBox::drop-down {
+    border: none;
+    background-color: transparent;
+}
+
+QComboBox::down-arrow {
+    image: url(down_arrow.png);
+}
+
+/* Customize QLabel */
+QLabel {
+    color: #c9d1d9;
+    font-size: 16px;
+}
+
+/* Customize QProgressBar */
+QProgressBar {
+    border: none;
+    border-radius: 2px;
+    background-color: #161b22;
+    color: #c9d1d9;
+}
+
+QProgressBar::chunk {
+    background-color: #58a6ff;
+}
+
+/* Customize QSlider */
+QSlider {
+    background-color: transparent;
+}
+
+QSlider::groove:horizontal {
+    height: 6px;
+    background-color: #21262d;
+}
+
+QSlider::handle:horizontal {
+    width: 12px;
+    background-color: #58a6ff;
+    border-radius: 6px;
+}
+
+/* Customize QScrollBar */
+QScrollBar:vertical {
+    width: 12px;
+    background-color: #161b22;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #373e47;
+    border-radius: 6px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    background-color: #161b22;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background-color: #161b22;
+}
+
+/* Customize QTabWidget */
+QTabWidget::pane {
+    border: none;
+    background-color: #161b22;
+}
+
+QTabWidget::tab-bar {
+    alignment: left;
+}
+
+QTabBar::tab {
+    border: none;
+    background-color: #161b22;
+    color: #c9d1d9;
+    padding: 8px 16px;
+}
+
+QTabBar::tab:hover {
+    background-color: #21262d;
+}
+
+QTabBar::tab:selected {
+    background-color: #373e47;
+}
+
+/* Customize QScrollBar in QPlainTextEdit */
+QPlainTextEdit QScrollBar:vertical {
+    width: 12px;
+    background-color: #161b22;
+}
+
+QPlainTextEdit QScrollBar::handle:vertical {
+    background-color: #373e47;
+    border-radius: 6px;
+}
+
+QPlainTextEdit QScrollBar::add-line:vertical,
+QPlainTextEdit QScrollBar::sub-line:vertical {
+    background-color: #161b22;
+}
+
+QPlainTextEdit QScrollBar::add-page:vertical,
+QPlainTextEdit QScrollBar::sub-page:vertical {
+    background-color: #161b22;
+}
+
+/* Customize QTableView */
+QTableView {
+    color: #c9d1d9;
+    background-color: #161b22;
+    border: none;
+    gridline-color: #21262d;
+    selection-background-color: #373e47;
+    selection-color: #c9d1d9;
+}
+
+QTableView::item {
+    padding: 4px;
+}
+
+QTableView::item:selected {
+    background-color: #373e47;
+    color: #c9d1d9;
+}
+
+/* Customize QTableView headers */
+QHeaderView {
+    background-color: #161b22;
+    color: #c9d1d9;
+}
+
+QHeaderView::section {
+    background-color: #161b22;
+    color: #c9d1d9;
+    padding: 4px;
+    border: none;
+}
+
+QHeaderView::section:first {
+
+
+
+}
+
+QHeaderView::section:hover {
+    background-color: #21262d;
+}
+
+/* Remove the gap */
+QTableView::corner {
+    background-color: #21262d;
+    border: none;
+}
+
+/* Style the table counter */
+QTableView QAbstractItemView::item:focus {
+    background-color: #58a6ff;
+    color: #ffffff;
+}
+
+/* Customize hover effect for action buttons */
+QPushButton[actionButton="true"]:hover {
+    background-color: #373e47;
+}
