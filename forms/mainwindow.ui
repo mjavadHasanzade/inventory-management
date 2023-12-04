@@ -171,7 +171,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionProduct">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-new-48.png</normaloff>:/images/icons8-new-48.png</iconset>
    </property>
    <property name="text">
@@ -180,7 +180,7 @@
   </action>
   <action name="actionInventory">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-inventory-48.png</normaloff>:/images/icons8-inventory-48.png</iconset>
    </property>
    <property name="text">
@@ -189,7 +189,7 @@
   </action>
   <action name="actionOrder">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-create-order-48.png</normaloff>:/images/icons8-create-order-48.png</iconset>
    </property>
    <property name="text">
@@ -198,7 +198,7 @@
   </action>
   <action name="actionProducts">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-view-all-48.png</normaloff>:/images/icons8-view-all-48.png</iconset>
    </property>
    <property name="text">
@@ -207,7 +207,7 @@
   </action>
   <action name="actionInventories">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-in-inventory-48.png</normaloff>:/images/icons8-in-inventory-48.png</iconset>
    </property>
    <property name="text">
@@ -216,7 +216,7 @@
   </action>
   <action name="actionOrders">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-order-48.png</normaloff>:/images/icons8-order-48.png</iconset>
    </property>
    <property name="text">
@@ -225,7 +225,7 @@
   </action>
   <action name="actionTransactions">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-transaction-48.png</normaloff>:/images/icons8-transaction-48.png</iconset>
    </property>
    <property name="text">
@@ -234,7 +234,7 @@
   </action>
   <action name="actionAbout">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-about-96.png</normaloff>:/images/icons8-about-96.png</iconset>
    </property>
    <property name="text">
@@ -243,7 +243,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset resource="imgs.qrc">
+    <iconset resource="../imgs.qrc">
      <normaloff>:/images/icons8-exit-48.png</normaloff>:/images/icons8-exit-48.png</iconset>
    </property>
    <property name="text">
@@ -253,7 +253,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="imgs.qrc"/>
+  <include location="../imgs.qrc"/>
  </resources>
  <connections/>
 </ui>

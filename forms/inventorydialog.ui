@@ -14,7 +14,7 @@
    <string>Add Inventory</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="imgs.qrc">
+   <iconset resource="../imgs.qrc">
     <normaloff>:/images/icons8-inventory-48.png</normaloff>:/images/icons8-inventory-48.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -94,7 +94,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="imgs.qrc"/>
+  <include location="../imgs.qrc"/>
  </resources>
  <connections/>
 </ui>
