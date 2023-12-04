@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,15 +25,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     addproductdialog.cpp \
+    database.cpp \
     product.cpp \
         main.cpp \
         mainwindow.cpp \
+        queries.cpp
 
 
 HEADERS += \
     addproductdialog.h \
+    database.h \
     product.h \
         mainwindow.h \
+    queries.h
 
 
 FORMS += \
@@ -41,4 +45,5 @@ FORMS += \
         mainwindow.ui
 
 RESOURCES += \
+    styles.qrc \
     imgs.qrc

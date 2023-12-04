@@ -3,16 +3,18 @@
 #include "addproductdialog.h"
 #include <QAbstractItemModel>
 
-
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    connect(&db,&Database::dbConnected,this,[=](){
+        statusBar()->showMessage("Connectd to Database...",3000);
+    });
 
+    db.setupDatabase();
     initilizeTableProducts();
-    statusBar()->showMessage("   Ready...",3000);
+
 }
 
 MainWindow::~MainWindow()
@@ -22,6 +24,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initilizeTableProducts()
 {
+    //    ui->tableViewProducts->verticalHeader()->setVisible(false);
     productModel->setColumnCount(6);
 
     productModel->setHorizontalHeaderItem(0,new QStandardItem("Name"));
@@ -33,13 +36,29 @@ void MainWindow::initilizeTableProducts()
 
     ui->tableViewProducts->setModel(productModel);
 
-    Product *product0=new Product(this, "P123456", "T-Shirt", "TS123", "2022/05/15", "2023/05/14", 29.99, 50);
-    Product *product1=new Product(this, "P987654", "Jeans", "JN789", "2022/08/01", "2024/08/01", 49.99, 100);
-    Product *product2=new Product(this, "P567890", "Sneakers", "SN456", "2022/06/10", "2023/06/09", 79.99, 75);
-    Product *product3=new Product(this, "P246810", "Backpack", "BP123", "2022/07/20", "2024/07/19", 39.99, 50);
+    // Perform database operations
+    if (db.getDb().isOpen()) {
+        QSqlQuery query;
+        if (query.exec(queries.getAllProductsQuery)) {
+            // Process the query results
 
-    products<<product0<<product1<<product2<<product3;
-    updateProductsTable();
+            while (query.next()) {
+                Product *product=new Product(this, query.value("id").toString(), query.value("name").toString(), query.value("code").toString(),
+                                               query.value("production_date").toString(), query.value("expiration_date").toString(),
+                                               query.value("price").toInt(),query.value("quantity_stock").toInt() );
+                products.append(product);
+
+            }
+            updateProductsTable();
+        } else {
+            qDebug() << "Failed to execute query:";
+            qDebug() << query.lastError().text();
+        }
+    }
+
+
+    // Close the database connection
+    db.getDb().close();
 
 }
 
@@ -72,6 +91,14 @@ void MainWindow::on_actionProduct_triggered()
                                           addProductDialog->m_code,addProductDialog->m_productionDate,addProductDialog->m_expirationDate
                                           ,addProductDialog->m_price,addProductDialog->m_stockQuantity);
 
+        QString q = queries.insertProductQuery.arg(addProductDialog->m_name,
+                             addProductDialog->m_code, addProductDialog->m_productionDate,
+                             addProductDialog->m_expirationDate, QString::number(addProductDialog->m_price),
+                             QString::number(addProductDialog->m_stockQuantity));
+
+        // Execute the insert query
+        db.executeQuery(q);
+
         products.append(newProduct);
         updateProductsTable();
     }
@@ -94,11 +121,15 @@ void MainWindow::on_deleteProductBtn_clicked()
 
             int row = selectedRows.at(0).row();
 
-            products.removeAt(row);
-            updateProductsTable();
 
             //no updating list
             //productModel->removeRow(row);
+
+            db.executeQuery(queries.deleteProductQuery.arg(products.at(row)->ID()));
+
+            products.removeAt(row);
+            updateProductsTable();
+
         }
 
     }else{
@@ -131,9 +162,16 @@ void MainWindow::on_editProductBtn_clicked()
                                                  addProductDialog->m_code,addProductDialog->m_productionDate,addProductDialog->m_expirationDate
                                                  ,addProductDialog->m_price,addProductDialog->m_stockQuantity);
 
+
+            QString q = queries.updateProductQuery
+                            .arg(addProductDialog->m_name,
+                                 addProductDialog->m_code, addProductDialog->m_productionDate,
+                                 addProductDialog->m_expirationDate, QString::number(addProductDialog->m_price),
+                                 QString::number(addProductDialog->m_stockQuantity),products.at(row)->ID());
+            db.executeQuery(q);
+
             products.replace(row,editedProduct);
             updateProductsTable();
-            qDebug()<<products.at(row)->ID();
         }
 
 
@@ -142,4 +180,5 @@ void MainWindow::on_editProductBtn_clicked()
     }
 
 }
+
 
