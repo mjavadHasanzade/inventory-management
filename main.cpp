@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
 
     if (styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QString styleSheet = QString::fromUtf8(styleFile.readAll());
-        qDebug()<<styleSheet.length();
         a.setStyleSheet(styleSheet);
     }
 
