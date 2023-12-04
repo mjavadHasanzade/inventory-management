@@ -24,30 +24,30 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-    addproductdialog.cpp \
-    database.cpp \
-    inventory.cpp \
-    inventorydialog.cpp \
-    product.cpp \
-        main.cpp \
-        mainwindow.cpp \
-        queries.cpp
+    ./sources/addproductdialog.cpp \
+    ./sources/database.cpp \
+    ./sources/inventory.cpp \
+    ./sources/inventorydialog.cpp \
+    ./sources/product.cpp \
+    ./sources/main.cpp \
+    ./sources/mainwindow.cpp \
+    ./sources/queries.cpp
 
 
 HEADERS += \
-    addproductdialog.h \
-    database.h \
-    inventory.h \
-    inventorydialog.h \
-    product.h \
-        mainwindow.h \
-    queries.h
+    ./headers/addproductdialog.h \
+    ./headers/database.h \
+    ./headers/inventory.h \
+    ./headers/inventorydialog.h \
+    ./headers/product.h \
+    ./headers/mainwindow.h \
+    ./headers/queries.h
 
 
 FORMS += \
-        addproductdialog.ui \
-        inventorydialog.ui \
-        mainwindow.ui
+        ./forms/addproductdialog.ui \
+        ./forms/inventorydialog.ui \
+        ./forms/mainwindow.ui
 
 RESOURCES += \
     styles.qrc \
