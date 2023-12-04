@@ -12,10 +12,9 @@ class Database : public QObject
 public:
     explicit Database(QObject *parent = nullptr);
 
-
     void setupDatabase();
     QSqlDatabase getDb() const;
-    QSqlQuery executeQuery(QString q);
+    void executeQuery(QString q);
 
 
 signals:
