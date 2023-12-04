@@ -26,6 +26,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     addproductdialog.cpp \
     database.cpp \
+    inventory.cpp \
+    inventorydialog.cpp \
     product.cpp \
         main.cpp \
         mainwindow.cpp \
@@ -35,6 +37,8 @@ SOURCES += \
 HEADERS += \
     addproductdialog.h \
     database.h \
+    inventory.h \
+    inventorydialog.h \
     product.h \
         mainwindow.h \
     queries.h
@@ -42,6 +46,7 @@ HEADERS += \
 
 FORMS += \
         addproductdialog.ui \
+        inventorydialog.ui \
         mainwindow.ui
 
 RESOURCES += \
