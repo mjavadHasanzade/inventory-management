@@ -1,7 +1,7 @@
-#include "inventory.h"
+#include "../headers/inventory.h"
 
-Inventory::Inventory(QObject *parent, int id, QString name, QString address, int capacity)
-    : QObject{parent},m_ID(id),m_name(name),m_address(address),m_capacity(capacity)
+Inventory::Inventory(QObject *parent, int id, QString name, QString address, int capacity,int capacityLeft)
+    : QObject{parent},m_ID(id),m_name(name),m_address(address),m_capacity(capacity),m_capacityLeft(capacityLeft)
 {
 
 }
@@ -24,4 +24,9 @@ QString Inventory::address() const
 int Inventory::capacity() const
 {
     return m_capacity;
+}
+
+int Inventory::capacityLeft() const
+{
+    return m_capacityLeft;
 }

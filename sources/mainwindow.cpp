@@ -182,11 +182,12 @@ void MainWindow::on_editProductBtn_clicked()
 
 void MainWindow::initilizeTableInventories()
 {
-    inventoryModel->setColumnCount(3);
+    inventoryModel->setColumnCount(4);
 
     inventoryModel->setHorizontalHeaderItem(0,new QStandardItem("Name"));
     inventoryModel->setHorizontalHeaderItem(1,new QStandardItem("Address"));
     inventoryModel->setHorizontalHeaderItem(2,new QStandardItem("Capacity"));
+    inventoryModel->setHorizontalHeaderItem(3,new QStandardItem("Capacity Left"));
 
     ui->inventoriesTableView->setModel(inventoryModel);
 
@@ -197,7 +198,8 @@ void MainWindow::initilizeTableInventories()
             // Process the query results
             while (query.next()) {
                 Inventory *inv=new Inventory(this, query.value("id").toInt(), query.value("name").toString()
-                                               ,query.value("address").toString(),query.value("capacity").toInt());
+                                               ,query.value("address").toString(),query.value("capacity").toInt()
+                                               ,query.value("capacityLeft").toInt());
                 inventories.append(inv);
 
             }
@@ -225,6 +227,7 @@ void MainWindow::updateInventoriesTable()
         inventoryModel->setItem(newRow, 0, new QStandardItem(inventories.at(i)->name()));
         inventoryModel->setItem(newRow, 1, new QStandardItem(inventories.at(i)->address()));
         inventoryModel->setItem(newRow, 2, new QStandardItem(QString::number(inventories.at(i)->capacity())));
+        inventoryModel->setItem(newRow, 3, new QStandardItem(QString::number(inventories.at(i)->capacityLeft())));
     }
 }
 
@@ -238,9 +241,10 @@ void MainWindow::on_actionInventory_triggered()
     ui->tabWidget->setCurrentIndex(1);
 
     if(ret == QDialog::Accepted){
-        Inventory *newInv=new Inventory(this,0,invDialog->name(),invDialog->address(),invDialog->capacity());
+        Inventory *newInv=new Inventory(this,0,invDialog->name(),invDialog->address(),invDialog->capacity(),invDialog->capacity());
 
-        QString q = queries.insertInventoryQuery.arg(invDialog->name(), invDialog->address(), QString::number(invDialog->capacity()));
+        QString q = queries.insertInventoryQuery.arg(invDialog->name(), invDialog->address(),
+                                                     QString::number(invDialog->capacity()), QString::number(invDialog->capacity()));
         db.executeQuery(q);
 
         inventories.append(newInv);

@@ -15,7 +15,7 @@ public:
     QString getAllProductsQuery="SELECT * FROM products";
 
     QString getAllInventoriesQuery="SELECT * FROM warehouses";
-    QString insertInventoryQuery="INSERT INTO warehouses (name, address, capacity) VALUES ('%1', '%2', '%3')";
+    QString insertInventoryQuery="INSERT INTO warehouses (name, address, capacity, capacityLeft) VALUES ('%1', '%2', '%3', '%4')";
     QString deleteInventoryQuery="DELETE FROM warehouses WHERE id = %1";
 
     QString checkProductInWarehouseExistsQuery="SELECT * FROM product_warehouse WHERE warehouse_id = %1";

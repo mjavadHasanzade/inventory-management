@@ -59,6 +59,11 @@ int InventoryDialog::capacity() const
     return m_capacity;
 }
 
+int InventoryDialog::capacityLeft() const
+{
+    return m_capacityLeft;
+}
+
 bool InventoryDialog::validateField(const QString& value, const QString& fieldName) {
     if (value.isEmpty()) {
         QMessageBox::critical(this, "Error", fieldName + " cannot be empty");

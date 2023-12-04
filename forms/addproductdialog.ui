@@ -14,7 +14,7 @@
    <string>Add Product</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="imgs.qrc">
+   <iconset resource="../imgs.qrc">
     <normaloff>:/images/icons8-new-48.png</normaloff>:/images/icons8-new-48.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -103,6 +103,20 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Inventory : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox"/>
+     </item>
+    </layout>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_12">
      <item>
       <spacer name="horizontalSpacer">
@@ -136,7 +150,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="imgs.qrc"/>
+  <include location="../imgs.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -7,12 +7,13 @@ class Inventory : public QObject
 {
     Q_OBJECT
 public:
-    explicit Inventory(QObject *parent,int id,QString name,QString address,int capacity);
+    explicit Inventory(QObject *parent,int id,QString name,QString address,int capacity,int capacityLeft);
 
     int ID() const;
     QString name() const;
     QString address() const;
     int capacity() const;
+    int capacityLeft() const;
 
 signals:
 
@@ -21,6 +22,7 @@ private:
     QString m_name;
     QString m_address;
     int m_capacity;
+    int m_capacityLeft;
 
 };
 

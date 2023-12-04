@@ -1,4 +1,4 @@
-#include "database.h"
+#include "../headers/database.h"
 
 
 Database::Database(QObject *parent)
@@ -56,7 +56,8 @@ void Database::setupDatabase()
                     "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                     "name VARCHAR(50) NOT NULL,"
                     "address VARCHAR(100) NOT NULL,"
-                    "capacity INT NOT NULL"
+                    "capacity INT NOT NULL,"
+                    "capacityLeft INT NOT NULL"
                     ")")) {
         qWarning() << "Failed to create 'warehouses' table:" << query.lastError().text();
         return ;

@@ -19,6 +19,7 @@ public:
     QString name() const;
     QString address() const;
     int capacity() const;
+    int capacityLeft() const;
 
 private slots:
     void on_submitPushButton_clicked();
@@ -30,6 +31,7 @@ private:
     QString m_name;
     QString m_address;
     int m_capacity;
+    int m_capacityLeft;
 
     bool validateField(const QString &value, const QString &fieldName);
     void setupRegex();
